@@ -1,0 +1,18 @@
+[project]
+name = "ssgp-experiments"
+version = "0.1.0"
+description = "Experiments for the thesis: Scalable GP Regression through State-Space Formulations"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+    "matplotlib>=3.9",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
