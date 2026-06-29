@@ -7,8 +7,8 @@ Exact Gaussian process (GP) regression with a stationary one-dimensional kernel 
 Three headline results, all reproduced by the code in this repository:
 
 1. **Posterior equivalence (to machine precision).** At n = 50 training points, the maximum absolute difference between the dense GP posterior and the state-space posterior is about 5.2e-15 (mean) and 3.2e-15 (standard deviation). The two methods compute the same thing.
-2. **Asymptotic scaling matches theory.** Sweeping n up to 100000, the fitted log-log slopes (fitted on the tail, n >= 10000) are 2.89 for the dense method, in line with its theoretical O(n^3), and 0.94 for the state-space method, in line with its theoretical O(n). These slopes are annotated directly on the figure below.
-3. **Concrete speed-up.** The dense method is timed up to n = 20000, where its O(n^3) solve already takes about 166 s, against roughly 2 s for the filter-plus-smoother pass: about a 100x gap, and it keeps widening. Beyond n = 20000 the dense solve is skipped (its O(n^3) time and O(n^2) memory make it impractical), while the state-space method is measured all the way to n = 100000. The runtime curves cross around n = 1500: below that the dense solver's highly optimized linear algebra is faster, above it the linear-time method pulls ahead.
+2. **Asymptotic scaling matches theory.** Sweeping n up to 100000, the fitted log-log slopes (fitted on the tail, n >= 13000) are 3.02 for the dense method and 1.00 for the state-space method: essentially the exact theoretical O(n^3) and O(n). These slopes are annotated directly on the figure below.
+3. **Concrete speed-up.** The dense method is timed up to n = 20000, where its O(n^3) solve takes about 87 s, against roughly 1 to 2 s for the filter-plus-smoother pass (around 65x), and the gap widens with n. Beyond n = 20000 the dense solve is skipped (its O(n^3) time and O(n^2) memory make it impractical), while the state-space method is measured all the way to n = 100000, where it still takes only a few seconds. The runtime curves cross around n = 1500: below that the dense solver's highly optimized linear algebra is faster, above it the linear-time method pulls ahead.
 
 <p align="center">
   <img src="Graphs/07_gp_vs_statespace.png" alt="Dense GP posterior overlaid with the state-space posterior; the two means and 95% credible bands coincide." width="80%">
@@ -17,10 +17,10 @@ Three headline results, all reproduced by the code in this repository:
 *Figure: the dense GP posterior and the state-space posterior plotted on the same axes. The means and 95% credible bands lie exactly on top of one another, illustrating result 1.*
 
 <p align="center">
-  <img src="Graphs/09b_inference_cost_loglog.png" alt="Log-log plot of inference runtime against the number of observations for the dense and state-space methods, with fitted slopes 2.89 and 0.94." width="70%">
+  <img src="Graphs/09b_inference_cost_loglog.png" alt="Log-log plot of inference runtime against the number of observations for the dense and state-space methods, with fitted slopes 3.02 and 1.00." width="70%">
 </p>
 
-*Figure: inference runtime against the number of observations n, on log-log axes, where a power law t = c n^p is a straight line of slope p. The fitted slopes (on n >= 10000) are 2.89 for the dense method, near its O(n^3), and 0.94 for the state-space method, near its O(n), illustrating results 2 and 3.*
+*Figure: inference runtime against the number of observations n, on log-log axes, where a power law t = c n^p is a straight line of slope p. The fitted slopes (on n >= 13000) are 3.02 for the dense method, matching its O(n^3), and 1.00 for the state-space method, matching its O(n), illustrating results 2 and 3.*
 
 ## Repository layout
 
