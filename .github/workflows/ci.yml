@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      # Only the core library deps: the tests do not need jupyter, matplotlib or filterpy.
+      - run: pip install "numpy>=2.0" "scipy>=1.13" "scikit-learn>=1.5" pytest ruff
+      # The claim this repo makes is that the state-space posterior is exact.
+      # These tests are that claim.
+      - run: pytest -q
+      - run: ruff check code/config.py code/data.py code/dense_gpr.py code/kalman_rts.py code/matern_ssm.py tests/

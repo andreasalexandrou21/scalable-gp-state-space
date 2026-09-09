@@ -6,7 +6,7 @@ This file builds the *continuous-time* LTI SDE from Section 6.2 of the thesis an
 
 The Matérn nu = 3/2 prior corresponds to the second-order scalar SDE
 
-        d^2 f/dt^2 + 2*lambda * df/dt + lambda^2 * f = w(t),                       (companion form, eq. lti-sde-scalar)
+        d^2 f/dt^2 + 2*lambda * df/dt + lambda^2 * f = w(t),      (eq. lti-sde-scalar)
 
 with lambda = sqrt(2*nu)/ell = sqrt(3)/ell and white-noise intensity q.
 Writing the state as x(t) = (f(t), f'(t))^T turns this into the first-order system
@@ -65,8 +65,10 @@ class Matern32StateSpace:
         self.H = np.array([[1.0, 0.0]], dtype=float)
 
         # White-noise spectral density / intensity q.
-        # For Matérn nu = p + 1/2 the thesis gives q = sigma^2 * 2*sqrt(pi)*Gamma(p+1)/Gamma(p+1/2) * lambda^(2p+1).
-        # For p = 1 this collapses to q = 4 * lambda^3 * sigma^2   (the "S_w(w) = 4 lambda^3 sigma^2" in Section 6.2).
+        # For Matérn nu = p + 1/2 the thesis gives
+        #     q = sigma^2 * 2*sqrt(pi)*Gamma(p+1)/Gamma(p+1/2) * lambda^(2p+1).
+        # For p = 1 this collapses to q = 4 * lambda^3 * sigma^2, the
+        # "S_w(w) = 4 lambda^3 sigma^2" of Section 6.2.
         self.q = 4.0 * self.lam**3 * self.sigma2
 
         # --- Stationary state covariance P_inf (solves the Lyapunov eq. lyapunov) ---

@@ -16,3 +16,11 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+# code/ is a flat directory of sibling modules, not an installed package, so name them
+# explicitly or isort treats them as third-party and collapses the import groups.
+known-first-party = ["config", "data", "dense_gpr", "kalman_rts", "matern_ssm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

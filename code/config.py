@@ -10,7 +10,7 @@ from __future__ import annotations
 # --- GP / kernel hyperparameters (fixed by hand for now) ---
 SIGMA2: float = 1.0  # kernel magnitude sigma^2  (prior variance of f)
 ELL: float = 1.0  # length-scale ell           (how fast the function wiggles)
-SIGMA_NOISE: float = 0.2  # observation noise std sigma_noise (so noise *variance* is SIGMA_NOISE**2)
+SIGMA_NOISE: float = 0.2  # observation noise std (so the noise *variance* is SIGMA_NOISE**2)
 
 # --- Data settings ---
 N_TRAIN: int = 40  # number of noisy training observations

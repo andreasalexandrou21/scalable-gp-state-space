@@ -8,7 +8,7 @@ Three headline results, all reproduced by the code in this repository:
 
 1. **Posterior equivalence (to machine precision).** At n = 50 training points, the maximum absolute difference between the dense GP posterior and the state-space posterior is about 5.2e-15 (mean) and 3.2e-15 (standard deviation). The two methods compute the same thing.
 2. **Asymptotic scaling matches theory.** Sweeping n up to 100000, the fitted log-log slopes (fitted on the tail, n >= 13000) are 3.02 for the dense method and 1.00 for the state-space method: essentially the exact theoretical O(n^3) and O(n). These slopes are annotated directly on the figure below.
-3. **Concrete speed-up.** The dense method is timed up to n = 20000, where its O(n^3) solve takes about 87 s, against roughly 1 to 2 s for the filter-plus-smoother pass (around 65x), and the gap widens with n. Beyond n = 20000 the dense solve is skipped (its O(n^3) time and O(n^2) memory make it impractical), while the state-space method is measured all the way to n = 100000, where it still takes only a few seconds. The runtime curves cross around n = 1500: below that the dense solver's highly optimized linear algebra is faster, above it the linear-time method pulls ahead.
+3. **Concrete speed-up.** The dense method is timed up to n = 20000, where its O(n^3) solve takes about 87 s, against roughly 1 to 2 s for the filter-plus-smoother pass (around 65x), and the gap widens with n. Beyond n = 20000 the dense solve is skipped (its O(n^3) time and O(n^2) memory make it impractical), while the state-space method is measured all the way to n = 100000, where it still takes only a few seconds. The runtime curves cross somewhere between n = 1000 and n = 2000; the sweep steps in units of 1000, so the crossing is bracketed rather than resolved. Below it the dense solver's highly optimized linear algebra is faster, above it the linear-time method pulls ahead.
 
 <p align="center">
   <img src="Graphs/07_gp_vs_statespace.png" alt="Dense GP posterior overlaid with the state-space posterior; the two means and 95% credible bands coincide." width="80%">
@@ -148,6 +148,23 @@ Exact wall-clock numbers depend on the machine and the installed package version
 ## Method in one paragraph
 
 A Matern-3/2 GP prior is equivalent to the solution of a second-order scalar stochastic differential equation, which in companion form becomes a first-order linear time-invariant SDE `dx/dt = F x + L w(t)` with a two-dimensional state `x(t) = (f(t), f'(t))` and observation `f(t) = H x(t)`. Sampling this SDE at the (sorted) observation times yields a discrete linear-Gaussian state-space model `x_k = A_k x_{k-1} + q_k`, with the transition matrix `A_k = exp(F dt)` and the process-noise covariance `Q_k = P_inf - A_k P_inf A_k^T` available in closed form (`matern_ssm.py` derives these and checks them against `scipy.linalg.expm` and the Lyapunov solver). A forward Kalman filter passes through the data once to compute the filtering posterior, and a backward RTS smoother turns that into the smoothing posterior conditioned on all observations, which is precisely the GP posterior. Because the state dimension m = 2 is fixed, the whole pass costs O(n m^3) = O(n) in time and memory. Test points are handled as missing observations on a merged, sorted train-plus-test grid (prediction step only), so the posterior is available at arbitrary inputs, and the filter accumulates the exact log marginal likelihood for later hyperparameter optimisation.
+
+## Tests
+
+The repository's central claim is that the state-space formulation is *exact*, not an
+approximation, so that is what is tested rather than merely that the code runs:
+
+```bash
+pip install pytest
+pytest -q
+```
+
+`tests/test_equivalence.py` checks that the O(n) filter-plus-smoother posterior matches the
+dense O(n^3) GP posterior in mean, in marginal variance, and in the full joint covariance
+(cross-covariances included) to better than 1e-10; that the hand-derived closed forms for
+`A_k`, `Q_k` and `P_inf` agree with `scipy.linalg.expm` and a Lyapunov solver; and that
+`P_inf` really is a fixed point of the discrete update at several step sizes. These run on
+every push via GitHub Actions.
 
 ## Thesis
 
