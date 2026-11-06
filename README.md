@@ -1,5 +1,7 @@
 # Scalable Gaussian Process Regression through State-Space Formulations
 
+**[Read the thesis (PDF, 41 pages)](thesis/Bachelor_thesis-Andreas_Alexandrou.pdf)** | BSc Mathematics, Vrije Universiteit Amsterdam, graded 9/10
+
 Exact Gaussian process (GP) regression with a stationary one-dimensional kernel normally costs O(n^3) time and O(n^2) memory, because it inverts a dense n x n covariance matrix. This repository accompanies a Bachelor mathematics thesis (Vrije Universiteit Amsterdam) that rewrites a Matern-3/2 GP prior (smoothness nu = 3/2, p = 1) as a two-dimensional linear time-invariant stochastic differential equation, i.e. a linear-Gaussian state-space model. A forward Kalman filter followed by a backward Rauch--Tung--Striebel (RTS) smoother then returns the *exact same* GP posterior in O(n) time and O(n) memory. This is not an approximation: the two posteriors agree to machine precision. The code here lets you reproduce that equivalence and the resulting scaling behaviour.
 
 ## What this shows
