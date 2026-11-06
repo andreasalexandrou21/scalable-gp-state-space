@@ -41,6 +41,7 @@ scalable-gp-state-space/
 │       ├── fig_error.py
 │       ├── fig_samples.py
 │       └── fig_scalability.py
+├── thesis/                  Submitted thesis (PDF)
 ├── Graphs/                  PNG figures used in the thesis (e.g. 07_gp_vs_statespace.png,
 │                            09b_inference_cost_loglog.png, 10_matern_kernel.png, ...)
 ├── pyproject.toml
@@ -49,7 +50,7 @@ scalable-gp-state-space/
 └── .gitignore
 ```
 
-The notebook and the `code/` package are two independent paths to the same result. `Experiments.ipynb` is the main artifact and reproduces every figure in the thesis; it does not import the `code/` package but re-implements the filter and smoother inline. The `code/` package is a tidy, modular reference version of the method. The thesis text itself is not included in this repository.
+The notebook and the `code/` package are two independent paths to the same result. `Experiments.ipynb` is the main artifact and reproduces every figure in the thesis; it does not import the `code/` package but re-implements the filter and smoother inline. The `code/` package is a tidy, modular reference version of the method. The submitted thesis PDF is in `thesis/`.
 
 ## Getting started
 
